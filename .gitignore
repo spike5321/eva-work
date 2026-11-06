@@ -1,0 +1,22 @@
+# dependencies
+**/node_modules/
+
+# build output
+**/dist/
+
+# QA captures — kept on disk for review, not worth their weight in the archive
+preview/qa/shots/
+preview/qa/mobile/
+preview/qa/click/
+preview/qa/playback/
+preview/qa/tail/
+preview/qa/ui/
+preview/qa/*.png
+
+# unrelated bundled python environment living next to the app
+tooling/
+
+# local noise
+*.log
+.DS_Store
+Thumbs.db

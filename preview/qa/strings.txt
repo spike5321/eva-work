@@ -1,0 +1,191 @@
+0	;function u3(i,v,p,{title:r="零號機",accent:N=1,sub:L="EVANGELION UNIT-00 / FIRST CHILD",mono:K="",index:G="",seal:z="",rule:M=!0,cue:J=!1,time:V=0}={}){const q="#071320",$="#f2f6f9",X="#c23a40",R=v<900;i.save(),i.fillStyle=q,i.fillRect(0,0,v,p);const sl=i.createLinearGradient(0,0,0,p);sl.addColorStop(0,"#0a1725"),sl.addColorStop(.55,"#06121d"),sl.addColorStop(1,"#040c15"),i.globalAlpha=.75,i.fillStyle=sl,i.fillRect(0,0,v,p),i.globalAlpha=1;const tl=R?v*.075:Math.max(52,v*.062);if(M){i.strokeStyle="#ffffff22",i.lineWidth=1,i.beginPath(),i.moveTo(tl,p*.105),i.lineTo(v-tl,p*.105),i.stroke(),i.beginPath(),i.moveTo(tl,p*.895),i.lineTo(v-tl,p*.895),i.stroke(),i.fillStyle="#ffffff33";for(let ul=0;ul<7;ul++)i.fillRect(tl+ul*(v-tl*2)/6,p*.105,1,R?5:7)}i.textBaseline="alphabetic";const el=(ul,Q,bl,T,U,W="left",P=0)=>{i.font=`500 ${T}px Consolas,"Cascadia Mono",monospace`,i.fillStyle=U,i.textAlign=W,i.letterSpacing=`${P}px`,i.fillText(ul,Q,bl),i.letterSpacing="0px"};el("EVANGELION / UNIT-00",tl,p*.105-(R?10:14),R?8:9.5,"#ffffff66","left",2.4),el(G,v-tl,p*.105-(R?10:14),R?8:9.5,"#ffffff44","right",2.4);const C=[...r],Y=R?.9:.82;let il=Math.min(p*.355,v*.24);i.textAlign="left",i.textBaseline="alphabetic",i.letterSpacing="0px",i.font=`900 ${il}px ${In}`;const vl=ul=>C.reduce((Q,bl)=>Q+i.measureText(bl).width*ul,0),nl=(v-tl*2)*(R?.96:.8);let Ml=vl(Y);Ml>nl&&(il*=nl/Ml,i.font=`900 ${il}px ${In}`,Ml=nl);const dl=C.map(ul=>i.measureText(ul).width*Y),Zl=p*.585,fl=v/2-Ml/2;i.save(),i.translate(fl,Zl);let ol=0;if(C.forEach((ul,Q)=>{i.save(),i.translate(ol,0),i.scale(Y,1),i.fillStyle=Q===N?X:$,i.fillText(ul,0,0),i.restore(),ol+=dl[Q]}),i.restore(),i.strokeStyle="#ffffff2e",i.lineWidth=1,i.beginPath(),i.moveTo(fl,Zl+il*.19),i.lineTo(fl+Ml,Zl+il*.19),i.stroke(),el(L,fl,Zl+il*.19+(R?18:24),R?8.5:10,"#ffffffb0","left",1.6),K&&(i.font=`500 ${R?8.5:10}px Consolas,"Cascadia Mono",monospace`,i.fillStyle="#ffffff55",i.textAlign="left",i.letterSpacing="1.4px",K.split("|").forEach((ul,Q)=>i.fillText(ul,tl,p*.8+Q*(R?16:19))),i.letterSpacing="0px"),z){const ul=Math.min(il*.26,64),Q=ul*3.1,bl=Math.min(v-tl-ul,fl+Ml+il*.18),T=Zl-Q*.62;i.strokeStyle=X,i.lineWidth=2,i.strokeRect(bl,T,ul,Q),i.fillStyle=X,i.font=`900 ${ul*.74}px ${In}`,i.textAlign="center",[...z].forEach((U,W)=>i.fillText(U,bl+ul/2,T+Q*(W+1)/(z.length+1)+ul*.26))}i.strokeStyle="#ffffff1f",i.lineWidth=1;for(const[ul,Q,bl,T]of[[tl,p*.105,1,-1],[v-tl,p*.105,-1,-1],[tl,p*.895,1,1],[v-tl,p*.895,-1,1]])i.beginPath(),i.moveTo(ul,Q+T*0),i.lineTo(ul+bl*12,Q),i.stroke();if(J){const ul=.6+.4*Math.abs(Math.sin(V*1.35)),Q=p*.935;i.globalAlpha=ul,i.strokeStyle="#ffffff2a",i.lineWidth=1,i.beginPath(),i.moveTo(v/2-(R?70:96),Q-(R?26:30)),i.lineTo(v/2+(R?70:96),Q-(R?26:30)),i.stroke(),i.fillStyle="#ffffff",i.font=`900 ${R?14:18}px ${In}`,i.textAlign="center",i.letterSpacing=R?"1px":"2.4px",i.fillText("點擊接續",v/2,Q+(R?-4:0)),i.letterSpacing="0px",i.globalAlpha=ul*.62,i.fillStyle="#ffffff",i.font=`500 ${R?7.5:8.5}px Consolas,"Cascadia Mono",monospace`,i.letterSpacing="2.6px",i.fillText("CLICK TO INJECT LCL",v/2,Q+(R?12:17)),i.letterSpacing="0px",i.globalAlpha=1}i.restore()}const O0="#10283c",i3="#b64e52",p2="#df8450",c3="#519d8e",f3="#7f9ab0";function s3(i,v,{width:p,height:r,nerv:N,knot:L,connected:K,closing:G=!1,destination:z,consoleOpen:M=!1,splash:J=!1}){if(J)return u3(i,p,r,{title:"零號機",accent:1,sub:"EVANGELION UNIT-00 / AYANAMI REI",index:"01 / 06",seal:"接續",mono:"FIRST CHILD|GEOFRONT / LEVEL 00",cue:!0,time:v}),null;const V=p<900,q=t3(p,r),{cx:$,cy:X,pad:R,ringRadius:sl,consoleTop:tl}=q,el=v>=yl.hold,C=(S,x,D,B=12,b=O0,_="left",w=!1,k=1)=>{i.font=`${w||B>=25?900:500} ${B}px ${w||B>=25?
+
+1	系統喚醒
+
+2	接續工作台
+
+3	接續完成
+
+4	LCL 系統
+
+5	LCL 注入
+
+6	環境校準
+
+7	駕駛員同步
+
+8	進入工作台
+
+9	本機互動預覽
+
+10	零號機接續程序
+
+11	字体加载失败，请跳过后刷新重试。
+
+12	正在载入字形与启动场景…
+
+13	跳過動畫（Esc）
+
+14	駕駛員確認
+
+15	綾波麗 
+
+16	IDENTITY 004 · 同調率 400%
+
+17	同步率為動畫演示
+
+18	確認後進入工作台 · 
+
+19	確認接續
+
+20	整理项目结构
+
+21	请整理这个项目的结构，并说明启动方式。
+
+22	调整界面样式
+
+23	你可以在偏好设定里调整线稿浓度，或重播零号机的接续程序。
+
+24	检查启动流程
+
+25	开场依次展示系统唤醒、LCL 注入、同步率与驾驶员确认，再交接至工作台。点击右上角的重播按钮，即可重新体验。
+
+26	我已检视项目，主要分成三个部分：
+
+27	前端界面：
+
+28	，包含画面布局与互动逻辑，负责 Codex 对话界面的呈现。
+
+29	本机服务：
+
+30	 启动本机服务，提供静态资源并接收界面请求。
+
+31	Codex 连线：
+
+32	 与 Codex 通讯，处理请求转发与串流回应。
+
+33	项目结构
+
+34	原项目可透过 
+
+35	 启动。这个版本用于体验界面与动画，对话和文件为示例内容。
+
+36	请先停止或等待示例回复
+
+37	请查看这张图片。
+
+38	接续程序沿用原项目的整屏 LCL 注入、同步环与驾驶员确认。同步率在 400% 等待，确认后再进入工作台。你可以在偏好设定切换节奏，或使用右上角的重播按钮。
+
+39	点击右上角的文件按钮，可以展开示例项目与 Diff 预览。这里展示原项目的主要结构，不会存取或修改你的文件。
+
+40	已收到你的讯息。这是互动预览的示例回复，你可以继续输入、切换对话、查看文件，或重播开场动画。正式接入后，这里会显示 Codex 的真实回应。
+
+41	已停止示例回复
+
+42	浏览器未允许剪贴簿存取
+
+43	请选择 8 MB 以内的图片
+
+44	关闭侧栏
+
+45	搜尋對話
+
+46	設計預覽
+
+47	重播接續程序
+
+48	設計參考
+
+49	偏好设定
+
+50	切换侧栏
+
+51	互动预览
+
+52	重播开场动画
+
+53	工具与文件
+
+54	工作台偏好
+
+55	準備好，開始吧。
+
+56	今天想在这个项目里完成什麽？
+
+57	调整启动动画
+
+58	附加图片
+
+59	示例回复
+
+60	正在准备示例回复…
+
+61	待传送图片
+
+62	移除图片
+
+63	描述你的任务…
+
+64	任务讯息
+
+65	加入图片
+
+66	预览模型
+
+67	思考强度
+
+68	传送讯息
+
+69	本机预览
+
+70	示例对话 · 未连接 Codex
+
+71	工具與文件
+
+72	收起文件面板
+
+73	复制文件内容
+
+74	尚无程式码变更
+
+75	此预览不会修改本机项目。
+
+76	工作台选单
+
+77	目前專案
+
+78	关闭视窗
+
+79	依照你的阅读习惯，调整这个终端。
+
+80	背景线稿浓度 
+
+81	背景线稿浓度
+
+82	缓慢接续 
+
+83	下次直接进入工作台 
+
+84	以目前设定重播
+
+85	已嵌入你提供的 FOT-MatisseElegantoPro-EB。标题和固定标识使用繁体字；对话与说明使用简体和易读字体。动画保持静音。
+
+86	输入对话名称…
+
+87	找不到符合的对话。
+
+88	这次接续程序的设计参考。
+
+89	驾驶员确认、连续场景与工作台交接。
+
+90	动画结尾自然交接到可操作视窗。
+
+91	短标题与状态色；本预览维持柔和蓝白风格。
+
+92	目前展示原项目的示例结构
+
+93	查看示例文件 
+
+94	保留你的扩充空间
+
+95	此版本先预览工作流程。插件安装与帐号连线将在接入原项目后提供。

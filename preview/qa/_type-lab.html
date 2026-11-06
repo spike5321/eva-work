@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>type lab</title>
+<style>
+@font-face{font-family:Eleganto;src:url('/assets/FOT-MatisseElegantoPro-EB.otf');font-weight:400}
+@font-face{font-family:MatissePro;src:url('/assets/_lab-matisse.ttf');font-weight:400}
+*{box-sizing:border-box}
+body{margin:0;background:#dfe9f3;color:#0b1520;font:13px/1.4 Consolas,monospace}
+.dark{background:#050708;color:#fff;padding:26px 32px}
+.paper{background:linear-gradient(160deg,#e9f3fb,#fcfdfe 55%,#c9dff1);padding:26px 32px}
+h4{margin:0 0 6px;font:11px/1 Consolas,monospace;letter-spacing:2px;color:#7d95ab;text-transform:uppercase}
+.row{margin:0 0 18px}
+.big{font-size:64px;line-height:1;white-space:nowrap}
+.mid{font-size:40px;line-height:1;white-space:nowrap;color:#142c40}
+.lab{display:flex;gap:26px;align-items:baseline;flex-wrap:wrap}
+.item{position:relative}
+.item em{position:absolute;top:-12px;left:0;font:10px Consolas,monospace;font-style:normal;color:#87a0b6;letter-spacing:1px}
+.e{font-family:Eleganto}.m{font-family:MatissePro}
+</style>
+</head>
+<body>
+<div class="dark">
+  <div class="row"><h4>reference string — Eleganto vs Matisse Pro EB</h4>
+    <div class="item"><em>ELEGANTO 64</em><div class="big e">シン・エヴァンゲリオン劇場版:||</div></div>
+    <div class="item" style="margin-top:22px"><em>MATISSE PRO 64</em><div class="big m">シン・エヴァンゲリオン劇場版:||</div></div>
+  </div>
+  <div class="row"><h4>零號機 — Eleganto / Matisse</h4>
+    <div class="item"><em>E</em><div class="big e" style="letter-spacing:-.045em">零號機、起動</div></div>
+    <div class="item" style="margin-top:22px"><em>M</em><div class="big m" style="letter-spacing:-.045em">零號機、起動</div></div>
+  </div>
+</div>
+<div class="paper">
+  <div class="row"><h4>駕駛員確認 — horizontal scale sweep (Eleganto)</h4>
+    <div class="lab">
+      <div class="item"><em>1.00</em><div class="mid e" style="transform:scaleX(1)">駕駛員確認</div></div>
+      <div class="item"><em>.94</em><div class="mid e" style="transform:scaleX(.94);transform-origin:left">駕駛員確認</div></div>
+      <div class="item"><em>.88</em><div class="mid e" style="transform:scaleX(.88);transform-origin:left">駕駛員確認</div></div>
+      <div class="item"><em>.82</em><div class="mid e" style="transform:scaleX(.82);transform-origin:left">駕駛員確認</div></div>
+      <div class="item"><em>.78</em><div class="mid e" style="transform:scaleX(.78);transform-origin:left">駕駛員確認</div></div>
+      <div class="item"><em>.73</em><div class="mid e" style="transform:scaleX(.73);transform-origin:left">駕駛員確認</div></div>
+    </div>
+  </div>
+  <div class="row"><h4>EVANGELION-00 — Eleganto vs Matisse, scale sweep</h4>
+    <div class="lab">
+      <div class="item"><em>E 1.00</em><div class="mid e">EVANGELION-00</div></div>
+      <div class="item"><em>M 1.00</em><div class="mid m">EVANGELION-00</div></div>
+      <div class="item"><em>E .74</em><div class="mid e" style="transform:scaleX(.74);transform-origin:left">EVANGELION-00</div></div>
+      <div class="item"><em>M .74</em><div class="mid m" style="transform:scaleX(.74);transform-origin:left">EVANGELION-00</div></div>
+    </div>
+  </div>
+  <div class="row"><h4>接續工作台 — Eleganto vs Matisse, tracking -4%</h4>
+    <div class="lab">
+      <div class="item"><em>E</em><div class="mid e" style="letter-spacing:-.04em">接續工作台</div></div>
+      <div class="item"><em>M</em><div class="mid m" style="letter-spacing:-.04em">接續工作台</div></div>
+    </div>
+  </div>
+</div>
+<script>
+  for (const f of ['Eleganto','MatissePro']) document.fonts.load(`400 64px ${f}`, 'シン零號機駕駛員確認接續工作台EVANGELION');
+  document.fonts.ready.then(()=>{window.__labReady=true});
+  // Glyph coverage probe: a char is "missing" when the face paint equals the fallback paint.
+  window.__cov = (chars) => {
+    const cv=document.createElement('canvas');cv.width=cv.height=140;const x=cv.getContext('2d');
+    const hash=(font,ch)=>{x.clearRect(0,0,140,140);x.fillStyle='#000';x.font=`80px ${font}`;x.fillText(ch,10,110);
+      const d=x.getImageData(0,0,140,140).data;let h=0;for(let i=0;i<d.length;i+=17)h=(h*31+d[i])>>>0;return h};
+    const out={};
+    for(const face of ['Eleganto','MatissePro']){
+      out[face]=[...chars].filter(ch=>hash(`${face},SimSun`,ch)===hash('SimSun',ch)).join('');
+    }
+    return out;
+  };
+</script>
+</body>
+</html>

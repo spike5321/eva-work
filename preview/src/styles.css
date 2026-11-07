@@ -42,9 +42,6 @@
 .eva-boot .boot-skip kbd{margin:0;border:0;padding:0;font-size:10px;letter-spacing:1px}
 .eva-boot .boot-skip:hover,.eva-boot .boot-skip:focus-visible{opacity:1;background:#edf5fb80}
 .eva-boot .boot-skip.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
-/* Opening card: the whole frame is the click target, so the skip moves to the corner. */
-.eva-boot.is-splash{cursor:pointer}
-.eva-boot.is-splash .boot-skip{left:auto;right:36px;bottom:20px;transform:none}
 
 .brand{gap:9px;padding-left:4px;padding-right:4px}
 .brand img{width:40px;flex-shrink:0}

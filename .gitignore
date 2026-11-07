@@ -5,13 +5,12 @@
 **/dist/
 
 # QA captures — kept on disk for review, not worth their weight in the archive
-preview/qa/shots/
-preview/qa/mobile/
-preview/qa/click/
-preview/qa/playback/
-preview/qa/tail/
-preview/qa/ui/
-preview/qa/*.png
+preview/qa/
+!preview/qa/**/*.json
+!preview/qa/**/*.md
+
+# scratch probes
+preview/src/_probe.txt
 
 # unrelated bundled python environment living next to the app
 tooling/

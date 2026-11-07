@@ -132,3 +132,55 @@ A bulk find-and-replace through PowerShell (`Get-Content -Raw` → `[IO.File]::W
 No git and no sourcemaps, so recovery was: re-encode the mojibake back to GBK bytes and decode as UTF-8, which restores ~95% of the text and leaves a `\uFFFD?` at every point where a byte was swallowed together with the following delimiter. The remaining spots were rebuilt from context — and for the app copy, from the previous bundle: `qa/dump-strings.mjs` extracts every CJK string literal from `dist/client/assets/*.js` into `qa/strings.txt`, which gave the exact original wording of all 96 UI strings.
 
 Rule going forward: edit CJK sources only with the read/edit/write tools (UTF-8), never through PowerShell text cmdlets. Two mojibake detectors worth keeping: count `\uFFFD`, or count `。`/`，` — a Chinese file that suddenly has none is mangled.
+
+## 2026-11-07 — emergency intro implementation
+
+Implemented the supplied emergency-intro design/plan in the production entry. A single projected SVG plane contains 20 regions, with a merged local-time seven-segment readout, Rei/EVA-00 identity, signal monitor and motto-free NERV. The initial view waits for input. The same scene clock removes the overlay over 0–.65s; all later sequence nodes are unchanged. Wake uses the viewport centre with a horizontal Matisse heading, hides the duplicate corner logo and background ring, then returns the corner brand at 2.8–3.15s.
+
+The draft's independent clock and fixed UTC+8 assumption were removed. The embedded OTF lacks 啟 (U+555F), so the button uses the equivalent 起動接續, entirely in the supplied font. Readiness gates start; failure or an eight-second resource timeout yields a readable fallback and enabled start. Skip remains available while loading. No audio or runtime dependency was added.
+
+### Visual evidence
+
+All files below are in `qa/emergency-intro/`. Screenshots were opened and checked, rather than accepting only command success.
+
+| Viewport | Opening | Wake |
+| --- | --- | --- |
+| 1440×900 | [splash](qa/emergency-intro/splash-1440x900.png) | [wake](qa/emergency-intro/wake-1440x900.png) |
+| 1920×1080 | [splash](qa/emergency-intro/splash-1920x1080.png) | [wake](qa/emergency-intro/wake-1920x1080.png) |
+| 1280×720 | [splash](qa/emergency-intro/splash-1280x720.png) | [wake](qa/emergency-intro/wake-1280x720.png) |
+| 2560×1440 | [splash](qa/emergency-intro/splash-2560x1440.png) | [wake](qa/emergency-intro/wake-2560x1440.png) |
+| 3440×1440 | [splash](qa/emergency-intro/splash-3440x1440.png) | [wake](qa/emergency-intro/wake-3440x1440.png) |
+
+`geometry.json` records actual projected panel and control bounds: no cropping, at least 16px between the start and skip rows, and equal proportions with ultrawide black margins. Screenshot time is deliberately injected as 04:54:32; production reads the device's local time.
+
+`scene-1440-*` and `scene-1280-*` cover .3, 2.5, 3.15, 6.6, 8.5, 9.5 and 14.9; `handoff-*` covers 20.6. Confirmed one centred wake group, restored corner brand, orange liquid above blue rails, and the original 400% red readout/ring with confirmation band. Live final frames: [normal hold](qa/emergency-intro/live-normal-hold.png), [normal workbench](qa/emergency-intro/live-normal-workbench.png), [slow hold](qa/emergency-intro/live-slow-hold.png), [slow workbench](qa/emergency-intro/live-slow-workbench.png). The new reduced-motion path is also captured.
+
+Baseline images are in `before/`; the old screenshot utility produced an actual 1414×807 viewport despite a 1440×900 window request. New captures explicitly emulate the stated viewport dimensions. The baseline still records the previous vertical wake and unchanged workbench; do not treat it as a pixel-identical 1440×900 comparison.
+
+### Verification
+
+- `node --test tests/emergency-browser.test.mjs`: **9/9 passed**. Initial keyboard-skip, rejected-font and full-reset tests were observed failing before the fixes.
+- Mouse starts from both the plane and button; Tab/Enter/Space retain native button semantics. Escape, repeated start, three skip/replay cycles, image/font failure, slow readiness and persisted direct-entry preference pass. QA pause/resume/start/splash/seek/confirm still work; seeking to hold shows the actual confirmation DOM.
+- Actual normal playback at 1440×900 reached hold in **15.178s**, then completed in **23.115s** including the inspection/confirmation delay. Actual slow playback at 1280×720 reached hold in **18.917s**, completing in **28.388s** including that delay. Both remained at scene time 14.9 before confirmation and restored the interactive workbench afterward.
+- Background pause was observed during live testing: `document.hidden=true` froze scene time at 9.833s. Automated visibility-event checks also verify frozen breathing/exit and no catch-up on return. The headless test harness now brings the page forward during intended foreground playback; early timeouts were investigated, not treated as product success.
+- `node scripts/qa-emergency.mjs`: five viewport matrix passed. Normal runs had **zero console errors and zero failed resource responses**; explicit resource-failure tests intentionally block/reject resources.
+- `node D:/eva/tooling/package/bin/npm-cli.js run build`: passed; emitted `dist/client/index.html`, `dist/server/index.js`, `dist/.openai/hosting.json`.
+- `node --test tests/sites-worker.test.mjs`: **4/4 passed**.
+- Bundled Python `scripts/check-font.py`: **Missing codepoints: []**. Missing glyphs now produce a nonzero exit code.
+- Independent read-only code review: no actionable defects. `git diff --check` passed after restoring UTF-8/LF for the HTML/font script.
+- Protected App/workbench, stage layout, timing, hosting, worker, packaging and worker-test files have no diff. Existing narrow-screen CSS remains intact. Existing unrelated draft entry files and crops were preserved as user work and are not in the production build.
+
+Limits: desktop Edge/Chromium verification only. Reduced motion applies to the new emergency screen and its exit; the existing LCL animation was not redesigned. No mobile acceptance, deployment, audio or live Codex integration in this change.
+
+Local preview: http://127.0.0.1:5174/ (Vite started by the implementation session). Changes remain local on `codex/emergency-intro`.
+
+## 2026-11-07 — pilot identity credential
+
+Implemented the user-approved compact credential in the 400% confirmation band. The 320×112px card has a 64×84px portrait, Matisse 綾波麗, English name, EVA-00 / FIRST CHILD, IDENTITY 004, a static 認証待機 status, decorative barcode and 4% NERV watermark. The supplied JPG is copied unchanged to `public/assets/rei-id-reference.jpg`; an SVG viewport displays only the portrait. Text and frame are native UI elements.
+
+Equal-width desktop side columns centre the card on the same viewport axis as the ring. The original 168px band, 150px short-viewport band, heading style, confirmation semantics and narrow-screen hidden-identity behavior remain. Changes are scoped to the identity component and desktop confirmation layout.
+
+- Screenshot review: [full 1440×900](qa/pilot-id/confirmation-1440x900.png), [credential detail](qa/pilot-id/credential-detail.png). Also inspected 1280×720, 1920×1080, 1280×600 and 901×720 in `qa/pilot-id/`.
+- `QA_URL=http://127.0.0.1:5175/ node scripts/qa-pilot-id.mjs`: all five layouts centred, inside confirmation bounds, and clear of heading/button; photograph returned 200; native Enter confirmed and replay restored the splash; zero console/resource errors. Actual rectangles saved in `qa/pilot-id/layout.json`.
+- Production build passed; Sites tests 4/4; actual OTF coverage including 認証待機 returned `Missing codepoints: []`.
+- Preview for this pass: http://127.0.0.1:5175/.

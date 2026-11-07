@@ -23,6 +23,7 @@ ws.onmessage = e => {
 };
 const send = (method, params = {}) => new Promise(res => { const n = ++id; pending.set(n, res); ws.send(JSON.stringify({ id: n, method, params })) });
 await send('Page.enable'); await send('Runtime.enable');
+await send('Emulation.setDeviceMetricsOverride', { width: Number(w), height: Number(h), deviceScaleFactor: 1, mobile: false });
 await send('Page.navigate', { url });
 await sleep(Number(wait));
 const r = await send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true });

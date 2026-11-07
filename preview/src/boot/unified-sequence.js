@@ -6,15 +6,13 @@ import {SEQUENCE as S} from './sequence-timing.js';
 import {stageLayout} from './stage-layout.js';
 import {drawBootAtmosphere} from './boot-atmosphere.js';
 import {drawMegastructure,drawBlueprint} from './megastructure.js';
-import {drawTitleCard} from './title-card.js';
+import {drawWakeTitle} from './wake-title.js';
 
 const INK='#10283c', RED='#b64e52', ORANGE='#df8450', SEA='#519d8e', HAIR='#7f9ab0';
 const timecode=t=>{const s=Math.floor(t),f=Math.floor((t-s)*24);return `00:00:${String(s).padStart(2,'0')}:${String(f).padStart(2,'0')}`};
 
 // One continuous stage: liquid is a viewport transition, never a diagram in a panel.
-export function drawUnit00Scene(c,time,{width:w,height:h,nerv,knot,connected,closing=false,destination,consoleOpen=false,splash=false}){
- // Opening card: the run starts here and waits for the pilot's click.
- if(splash){drawTitleCard(c,w,h,{title:'零號機',accent:1,sub:'EVANGELION UNIT-00 / AYANAMI REI',index:'01 / 06',seal:'接續',mono:'FIRST CHILD|GEOFRONT / LEVEL 00',cue:true,time});return null}
+export function drawUnit00Scene(c,time,{width:w,height:h,nerv,knot,connected,closing=false,destination,consoleOpen=false}){
 
  const mobile=w<900,layout=stageLayout(w,h),{cx,cy,pad,ringRadius:r,consoleTop}=layout;
  const thresholdReached=time>=S.hold;
@@ -28,29 +26,13 @@ export function drawUnit00Scene(c,time,{width:w,height:h,nerv,knot,connected,clo
  const structureDim=(1-.62*stage(time,S.syncStart+.35,S.syncStart+2.1))*(1-.42*stage(time,S.transferStart,S.transferStart+1.2));
  const structureAlpha=(.85+.15*stage(time,S.lclStart,S.lclEnd))*structureDim;
  const sink=2.6*stage(time,S.lclStart,S.lclEnd);
- drawMegastructure(c,time,w,h,{alpha:structureAlpha,reveal:stage(time,.1,1.7),ink:'#0e2a40',far:'#9dbdd4',accent:'#b64e52',push:time*.05+sink,near:0,ring:time<S.syncStart-.2,vpy:cy});
+ drawMegastructure(c,time,w,h,{alpha:structureAlpha,reveal:stage(time,.1,1.7),ink:'#0e2a40',far:'#9dbdd4',accent:'#b64e52',push:time*.05+sink,near:0,ring:time>=S.lclStart&&time<S.syncStart-.2,vpy:cy,centerDim:time<S.lclStart?.28:1});
 
  drawBootAtmosphere(c,time,w,h,{left:mobile?.13:.235,right:mobile?.87:.865});
 
- // 起動: a vertical Mincho column at the margin, the shaft kept clear behind it.
- const wakeAlpha=stage(time,0,1.5)*(1-stage(time,S.lclStart+.15,S.lclStart+1.35));
- if(wakeAlpha>0){
-  c.save();c.globalAlpha=wakeAlpha;c.textBaseline='alphabetic';
-  const colX=(mobile?pad*1.1:pad+w*.055),markSize=mobile?Math.min(h*.088,w*.20):Math.min(h*.135,w*.11);
-  const gs=mobile?Math.min(h*.056,w*.125):Math.min(h*.082,w*.062),mid=colX+markSize*.5;
-  const colH=gs*1.14*4,blockTop=cy-(markSize+gs*1.3+colH)*.54;
-  if(nerv)c.drawImage(nerv,colX,blockTop,markSize,markSize);
-  let gy=blockTop+markSize+gs*1.55;
-  line(mid-gs*.92,gy-gs*.78,mid-gs*.92,gy+gs*3.2,'#9db6ca');
-  c.font=`900 ${gs}px "EvaDisplay","SimSun",serif`;c.fillStyle=INK;c.textAlign='center';
-  for(const ch of '系統喚醒'){c.save();c.translate(mid,gy);c.scale(.82,1);c.fillText(ch,0,0);c.restore();gy+=gs*1.14}
-  if(!mobile){
-   c.save();c.translate(mid+gs*1.35,gy-gs*4.05);c.rotate(-Math.PI/2);
-   c.font='500 9.5px Consolas,monospace';c.fillStyle='#6e8ba1';c.textAlign='left';c.letterSpacing='2.6px';
-   c.fillText('SYSTEM WAKE / FIRST CHILD',0,0);c.restore();
-  }
-  c.textAlign='left';c.letterSpacing='0px';c.restore();
- }
+ // One centred wake composition, independent of the later dial/confirmation anchor.
+ const wakeAlpha=stage(time,.25,.95)*(1-stage(time,2.3,2.8));
+ drawWakeTitle(c,{width:w,height:h,nerv,alpha:wakeAlpha});
 
  // Side rails sit behind the liquid, so the moving surface tints submerged stripes.
  for(const right of [false,true]){c.save();if(right){c.translate(w,0);c.scale(-1,1)}c.fillStyle='#527f9f';c.fillRect(0,0,mobile?6:10,h);c.beginPath();c.rect(mobile?10:16,106,mobile?7:11,h-185);c.clip();for(let y=70;y<h;y+=28){c.fillStyle='#86acc6';c.beginPath();c.moveTo(5,y);c.lineTo(33,y-20);c.lineTo(33,y-9);c.lineTo(5,y+11);c.fill()}c.restore()}
@@ -136,9 +118,11 @@ export function drawUnit00Scene(c,time,{width:w,height:h,nerv,knot,connected,clo
  // Armour perimeter: brand, unit plate, timecode, hazard flashes.
  const wet=surface>.55,chromeInk=wet?'#2b1a0d':'#142c40',chromeMuted=wet?'#6d4423':'#42627c',chromeLabel=wet?'#7c5330':'#7b95aa';
  const brandSize=mobile?43:58,brandX=pad+brandSize+(mobile?10:16);
+ c.save();c.globalAlpha=stage(time,2.8,3.15);
  if(nerv)c.drawImage(nerv,pad,19,brandSize,brandSize);
  c.save();c.translate(brandX,mobile?54:60);c.scale(mobile?.62:.66,1);text('EVANGELION-00',0,0,mobile?25:33,chromeInk,'left',true);c.restore();
  c.save();c.font=`500 ${mobile?7:8.5}px Consolas,monospace`;c.fillStyle=chromeLabel;c.textAlign='left';c.letterSpacing='1.6px';c.fillText('SYS.BOOT / 00',brandX,mobile?68:78);c.restore();
+ c.restore();
  text('零號機',w-pad,47,19,wet?'#7d3f18':ORANGE,'right');text('AYANAMI REI / FIRST CHILD',w-pad,67,10,wet?'#6d4423':'#607b93','right');
  line(pad,85,w-pad,85);
  for(const bottom of [false,true]){c.save();if(bottom){c.translate(0,h);c.scale(1,-1)}for(let i=0;i<(mobile?6:14);i++){c.save();c.translate(pad+i*14,9);c.transform(1,0,-.65,1,0,0);c.fillStyle=i%4===0?ORANGE:SEA;c.fillRect(0,0,7,5);c.restore()}line(pad+(mobile?94:206),12,w-pad,12);c.restore()}

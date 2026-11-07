@@ -7,7 +7,7 @@ const mix=(a,b,t)=>`rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1
 // pylon edges converging on one vanishing point, floor and ceiling ties, a small
 // aperture far away, utility poles at the foot for scale. Line-work only, because
 // the stage is paper and the megastructure has to stay a drawing on it.
-export function drawMegastructure(c,time,w,h,{alpha=1,reveal=1,ink='#0e2a40',far='#9dbdd4',accent='#b64e52',push=0,near=0,ring=true,vpy:horizon}={}){
+export function drawMegastructure(c,time,w,h,{alpha=1,reveal=1,ink='#0e2a40',far='#9dbdd4',accent='#b64e52',push=0,near=0,ring=true,vpy:horizon,centerDim=1}={}){
  if(alpha<=0||reveal<=0)return;
  const mobile=w<900,cx=w/2;
  const vpy=horizon??h*(mobile?.30:.305);
@@ -27,7 +27,7 @@ export function drawMegastructure(c,time,w,h,{alpha=1,reveal=1,ink='#0e2a40',far
  seg(nc.x,nc.y,cx,vpy,alpha*reveal*.10,1,mix(nearRGB,farRGB,.65));
  seg(nc2.x,nc2.y,cx,vpy,alpha*reveal*.10,1,mix(nearRGB,farRGB,.65));
  for(let i=N-1;i>=0;i--){
-  const Z=zs[i],d=clamp(1.04-i*.145,.10,1),tone=clamp(1-d);
+  const Z=zs[i],d=clamp(1.04-i*.145,.10,1)*(i>=2?centerDim:1),tone=clamp(1-d);
   const col=mix(nearRGB,farRGB,Math.pow(tone,.75));
   const bl=P(-halfW,yBot,Z),br=P(halfW,yBot,Z),tl=P(-halfW,yTop,Z),tr=P(halfW,yTop,Z);
   const bl2=P(-thick,yBot,Z),br2=P(thick,yBot,Z),tl2=P(-thick,yTop,Z),tr2=P(thick,yTop,Z);

@@ -19,8 +19,10 @@ for i in range(u16(base+2)):
    for ch in range(a,b+1):
     glyph=(ch+delta)&65535 if not off else u16(offsets+j*2+off+(ch-a)*2)
     if glyph:codes.add(ch)
-text='系統喚醒駕駛員確認綾波麗零號機同步率接續準備完成進入工作台新對話專案設計預覽工具文件偏好設定搜尋'
-print('Font glyph coverage:',len(codes),'Missing codepoints:',[hex(ord(c)) for c in sorted(set(text)-set(map(chr,codes)))])
+text='系統喚醒駕駛員確認綾波麗零號機同步率接續準備完成進入工作台新對話專案設計預覽工具文件偏好設定搜尋起動接續內部緊急狀態警告認証待機'
+missing=[hex(ord(c)) for c in sorted(set(text)-set(map(chr,codes)))]
+print('Font glyph coverage:',len(codes),'Missing codepoints:',missing)
+if missing:raise SystemExit(1)
 base=tables['name'][0]
 for i in range(u16(base+2)):
  platform,enc,lang,nid,length,offset=struct.unpack_from('>HHHHHH',data,base+6+i*12)
